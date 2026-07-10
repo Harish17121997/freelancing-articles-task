@@ -50,7 +50,11 @@ useSeoMeta({
   <div>
     <AppHeader title="Articles">
       <template #actions>
-        <BaseIconButton :ariaLabel="viewMode === 'grid' ? 'Switch to list view' : 'Switch to grid view'" @click="toggleViewMode">
+        <BaseIconButton
+          :ariaLabel="viewMode === 'grid' ? 'Switch to list view' : 'Switch to grid view'"
+          :aria-pressed="viewMode === 'list'"
+          @click="toggleViewMode"
+        >
           <svg v-if="viewMode === 'grid'" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" class="h-5 w-5" aria-hidden="true">
             <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
           </svg>
@@ -62,7 +66,11 @@ useSeoMeta({
           </svg>
         </BaseIconButton>
 
-        <BaseIconButton ariaLabel="Search articles" @click="toggleSearch">
+        <BaseIconButton
+          :ariaLabel="showSearch ? 'Close search' : 'Search articles'"
+          :aria-expanded="showSearch"
+          @click="toggleSearch"
+        >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" class="h-5 w-5" aria-hidden="true">
             <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2" />
             <path d="m21 21-4.3-4.3" stroke="currentColor" stroke-width="2" stroke-linecap="round" />

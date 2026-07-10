@@ -46,7 +46,12 @@ useSeoMeta({
 
           <span class="text-base font-medium">Article</span>
 
-          <BaseIconButton ariaLabel="Toggle favorite" tone="light" @click="isFavorite = !isFavorite">
+          <BaseIconButton
+            :ariaLabel="isFavorite ? 'Remove from favorites' : 'Add to favorites'"
+            :aria-pressed="isFavorite"
+            tone="light"
+            @click="isFavorite = !isFavorite"
+          >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" :fill="isFavorite ? 'currentColor' : 'none'" class="h-5 w-5" aria-hidden="true">
               <path
                 d="M12 21s-7-4.35-9.5-8.5C1 9 2 5 6 5c2 0 3.5 1.2 4 2.4.5-1.2 2-2.4 4-2.4 4 0 5 4 3.5 7.5C19 16.65 12 21 12 21Z"
