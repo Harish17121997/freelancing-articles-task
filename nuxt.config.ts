@@ -5,6 +5,10 @@ export default defineNuxtConfig({
 
   ssr: true,
 
+  experimental: {
+    appManifest: false
+  },
+
   modules: ['@nuxtjs/tailwindcss', '@pinia/nuxt'],
 
   // Nuxt's default auto-import prefixes components in a subdirectory with
