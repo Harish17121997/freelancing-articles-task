@@ -24,7 +24,7 @@ const variantClasses: Record<NonNullable<Props['variant']>, string> = {
 <template>
   <button
     :type="type"
-    class="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-not-allowed disabled:opacity-50"
+    class="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold transition-colors active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-not-allowed disabled:opacity-50 disabled:active:scale-100"
     :class="[pill ? 'rounded-full' : 'rounded-sm', variantClasses[variant]]"
     @click="$emit('click', $event)"
   >

@@ -38,6 +38,9 @@ If unset, it defaults to the URL given in the challenge brief (see
 ## 2. Project structure
 
 ```
+app/
+  router.options.ts  Scroll-restoration behavior (back nav keeps scroll
+                      position instead of jumping to top).
 components/
   ui/          Pure, app-agnostic UI primitives (BaseButton, BaseIconButton,
                BaseSkeleton). No app/business knowledge — could be dropped
@@ -119,19 +122,37 @@ placeholder styling:
   "Read More" CTA, and a single Inter font family throughout. Exact hex
   values were sampled visually from the shared screenshots (mobile frames),
   not pulled from Figma's inspector — treat them as close approximations.
-- **Grid/list toggle.** The list page can switch between a 2-column grid
-  (image + title only) and a 1-column list (image + title + date + "Read
-  More" pill), matching the two mock screens. This is local component state
-  (`ref` in `pages/index.vue`), not a Pinia store — it's transient UI
-  preference for a single page, not shared/cross-page data.
+- **Grid/list toggle, and it persists.** The list page switches between a
+  2-column grid (image + title only) and a 1-column list (image + title +
+  description + date + "Read More" pill), matching the two mock screens.
+  The choice is stored via `useCookie('article-view-mode', …)` in
+  `pages/index.vue` rather than a plain `ref` or a Pinia store: a `ref`
+  would reset every time this page component unmounts (i.e. every visit to
+  an article and back), and an in-memory Pinia store would reset on a hard
+  refresh. A cookie survives both, is read during SSR (so the very first
+  response already renders in the right layout — no flash of the wrong
+  view), and still avoids adding global Pinia state for what is a
+  single-page display preference.
 - **Search.** The header's search icon reveals a client-side title filter
   over the already-fetched list (`computed` in `pages/index.vue`). No new
-  API calls; it's a pure `Array.filter` over `store.articles`, in keeping
-  with "avoid duplicate/unnecessary requests."
+  API calls and no debounce needed; it's a pure `Array.filter` over
+  `store.articles` on every keystroke, in keeping with "avoid
+  duplicate/unnecessary requests."
+- **Scroll + navigation.** `app/router.options.ts` sets an explicit
+  `scrollBehavior` that restores the saved scroll position on back/forward
+  navigation (list → article → back lands you where you left off) and
+  resets to the top on a fresh navigation (list → article). Combined with
+  the Pinia store's fetch-once behavior, going back to the list re-renders
+  instantly from cache with no network request and no lost scroll
+  position or view-mode selection.
 - **Detail-page hero.** The dark header block, back button, and title/time
   meta stay in place across loading, error, and not-found states (skeleton
   placeholders swap in instead of the real content) so navigation chrome
   never disappears and the page never layout-shifts.
+- **Touch targets & feedback.** Icon buttons are 44×44px (the standard
+  minimum comfortable tap target), and all buttons/cards get a small
+  `active:scale-95`/`active:scale-[0.98]` press animation so taps feel
+  acknowledged, on top of the existing hover/focus-visible states.
 - **Favorite (heart) icon.** Rendered as a local, non-persisted UI toggle.
   The brief has no requirement for a favorites feature or storage, so no
   Pinia state/localStorage was added for it — see "what I'd improve" below.

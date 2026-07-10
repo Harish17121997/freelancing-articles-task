@@ -16,7 +16,7 @@ const imageFailed = ref(false)
 <template>
   <NuxtLink
     :to="`/articles/${article.id}`"
-    class="group flex overflow-hidden rounded-2xl bg-night transition-transform focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+    class="group flex overflow-hidden rounded-2xl bg-night transition-transform active:scale-[0.98] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
     :class="layout === 'grid' ? 'flex-col hover:-translate-y-0.5' : 'flex-col sm:flex-row sm:items-stretch'"
   >
     <div
@@ -50,6 +50,10 @@ const imageFailed = ref(false)
       >
         {{ article.title }}
       </h3>
+
+      <p v-if="layout === 'list'" class="line-clamp-2 text-sm text-white/70">
+        {{ article.description }}
+      </p>
 
       <div v-if="layout === 'list'" class="mt-auto flex items-center justify-between gap-3">
         <span class="flex items-center gap-1.5 text-xs text-white/70">

@@ -6,7 +6,18 @@ const store = useArticlesStore()
 // navigation back to "/"), which avoids a duplicate request.
 await store.load()
 
-const viewMode = ref<'grid' | 'list'>('grid')
+// A cookie (not a Pinia store) because it's a single-page display preference,
+// not shared/cross-page app state — but it still needs to survive both
+// client-side navigation away-and-back AND a full page refresh, which a
+// plain `ref` cannot do (it's re-created every time this page component
+// mounts). `useCookie` is SSR-safe, so there's no hydration mismatch either.
+const viewMode = useCookie<'grid' | 'list'>('article-view-mode', {
+  default: () => 'grid',
+  maxAge: 60 * 60 * 24 * 365,
+  sameSite: 'lax'
+})
+if (viewMode.value !== 'grid' && viewMode.value !== 'list') viewMode.value = 'grid'
+
 const showSearch = ref(false)
 const searchQuery = ref('')
 
@@ -77,7 +88,7 @@ useSeoMeta({
       <div
         v-if="store.isLoading"
         class="grid gap-4 sm:gap-6"
-        :class="viewMode === 'grid' ? 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5' : 'grid-cols-1 lg:grid-cols-2'"
+        :class="viewMode === 'grid' ? 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5' : 'grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3'"
         aria-busy="true"
         aria-label="Loading articles"
       >

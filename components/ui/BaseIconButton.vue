@@ -16,7 +16,7 @@ defineEmits<{ click: [MouseEvent] }>()
   <button
     type="button"
     :aria-label="ariaLabel"
-    class="inline-flex h-9 w-9 items-center justify-center rounded-full transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+    class="inline-flex h-11 w-11 items-center justify-center rounded-full transition-colors active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
     :class="tone === 'dark' ? 'text-ink hover:bg-paper-dim' : 'text-white hover:bg-white/10'"
     @click="$emit('click', $event)"
   >
