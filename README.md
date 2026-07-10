@@ -8,7 +8,8 @@ Built for the Web Developer Challenge (Fishermen Services and Solutions).
 
 ## 1. Project setup instructions
 
-**Requirements:** Node.js 18.20+ or 20.x, npm.
+**Requirements:** Node.js 20.x+ (the Nuxt 3 CLI relies on a `node:util` export
+that Node 18 doesn't have), npm.
 
 ```bash
 npm install
