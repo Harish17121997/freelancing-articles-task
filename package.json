@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@pinia/nuxt": "^0.5.5",
+    "better-sqlite3": "^12.11.1",
     "nuxt": "^3.13.0",
     "pinia": "^2.2.2",
     "vue": "^3.4.38",
