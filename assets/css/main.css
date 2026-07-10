@@ -13,7 +13,7 @@ body {
 }
 
 ::selection {
-  @apply bg-wire-soft text-ink;
+  @apply bg-brand-soft text-white;
 }
 
 /* Respect reduced-motion preferences app-wide. */

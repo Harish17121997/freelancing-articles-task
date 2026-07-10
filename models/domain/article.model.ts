@@ -15,7 +15,10 @@ export interface Article {
   url: string
   imageUrl: string | null
   publishedAt: Date | null
+  /** Short absolute date, e.g. "24 Oct, 2021" — used on list cards. */
   publishedAtLabel: string
+  /** Relative label, e.g. "10h ago" — used on the article detail page. */
+  publishedAtRelativeLabel: string
 }
 
 /** Values substituted in the UI when the API omits a field. Centralized so copy stays consistent. */

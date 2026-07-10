@@ -39,9 +39,9 @@ If unset, it defaults to the URL given in the challenge brief (see
 
 ```
 components/
-  ui/          Pure, app-agnostic UI primitives (BaseButton, BaseSkeleton,
-               BaseSpinner, BaseBadge). No app/business knowledge — could be
-               dropped into any project unchanged.
+  ui/          Pure, app-agnostic UI primitives (BaseButton, BaseIconButton,
+               BaseSkeleton). No app/business knowledge — could be dropped
+               into any project unchanged.
   common/      Feature components that know about `Article`: AppHeader,
                ArticleCard, ArticleCardSkeleton, ArticleGrid, ErrorState,
                EmptyState.
@@ -109,7 +109,38 @@ types/
   appropriately worded copy per `ApiErrorKind` instead of a single generic
   "error occurred" message everywhere.
 
-## 5. Error-handling approach
+## 5. Design implementation (Figma)
+
+The UI follows the provided Figma mock rather than the earlier "wire service"
+placeholder styling:
+
+- **Colors/type** (`tailwind.config.ts`): dark teal `night` surfaces for
+  article cards and the detail-page hero, a `brand` blue for the primary
+  "Read More" CTA, and a single Inter font family throughout. Exact hex
+  values were sampled visually from the shared screenshots (mobile frames),
+  not pulled from Figma's inspector — treat them as close approximations.
+- **Grid/list toggle.** The list page can switch between a 2-column grid
+  (image + title only) and a 1-column list (image + title + date + "Read
+  More" pill), matching the two mock screens. This is local component state
+  (`ref` in `pages/index.vue`), not a Pinia store — it's transient UI
+  preference for a single page, not shared/cross-page data.
+- **Search.** The header's search icon reveals a client-side title filter
+  over the already-fetched list (`computed` in `pages/index.vue`). No new
+  API calls; it's a pure `Array.filter` over `store.articles`, in keeping
+  with "avoid duplicate/unnecessary requests."
+- **Detail-page hero.** The dark header block, back button, and title/time
+  meta stay in place across loading, error, and not-found states (skeleton
+  placeholders swap in instead of the real content) so navigation chrome
+  never disappears and the page never layout-shifts.
+- **Favorite (heart) icon.** Rendered as a local, non-persisted UI toggle.
+  The brief has no requirement for a favorites feature or storage, so no
+  Pinia state/localStorage was added for it — see "what I'd improve" below.
+- **Relative vs. absolute dates.** List cards show a short absolute date
+  ("7 Mar, 2025"); the detail page shows a relative label ("10h ago"),
+  falling back to the same absolute format once an article is over a week
+  old (`utils/formatDate.ts::formatRelativeTime`).
+
+## 6. Error-handling approach
 
 - `useApi.ts` classifies failures (HTTP 404, 5xx, other status codes, or a
   connection-level failure with no status at all) into an `AppError` with
@@ -131,7 +162,7 @@ types/
   a placeholder icon via an `@error` handler on the `<img>`, rather than
   showing a broken-image icon.
 
-## 6. Assumptions made
+## 7. Assumptions made
 
 - The mock API's shape matches a NewsAPI-style `{ status, totalResults,
   articles: [...] }` payload — confirmed by fetching the provided URL
@@ -150,14 +181,19 @@ types/
   talk to it directly. Swapping in a real internal API later only means
   changing `NUXT_PUBLIC_ARTICLES_API_URL` and, if auth is required, adding
   headers inside `useApi.ts` — the one file that owns the fetch call.
+- Figma colors/spacing were read off shared screenshots rather than the
+  Figma inspector (no Figma access from this environment), so exact hex
+  values and pixel spacing are close approximations, not exact extracts.
 
-## 7. What I'd improve with more time
+## 8. What I'd improve with more time
 
 - Add unit tests for the pure functions (`mapArticle`, `articleId`,
   `formatDate`) and component tests for the loading/empty/error branches
   of `pages/index.vue`.
-- Category/search filtering backed by a second Pinia getter, since the
-  store already holds the full list client-side.
+- Pull the actual Figma file (via the Figma MCP connector or an export) to
+  replace the visually-approximated colors/spacing with exact values.
+- Persist the favorite/heart toggle (localStorage or a small Pinia store)
+  instead of the current decorative, non-persisted interaction.
 - Real pagination/infinite scroll if the underlying API supported it (the
   mock returns a fixed set).
 - An `<ErrorBoundary>`-style wrapper (via `<NuxtErrorBoundary>`) around the

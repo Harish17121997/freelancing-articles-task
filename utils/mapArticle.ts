@@ -1,7 +1,7 @@
 import type { ApiArticle } from '~/models/api/article.model'
 import { ARTICLE_FALLBACKS, type Article } from '~/models/domain/article.model'
 import { encodeArticleId } from '~/utils/articleId'
-import { formatPublishedAt, parsePublishedAt } from '~/utils/formatDate'
+import { formatPublishedAt, formatRelativeTime, parsePublishedAt } from '~/utils/formatDate'
 
 /**
  * Strips the "[+1234 chars]" / lorem-ipsum truncation suffix the mock API
@@ -35,7 +35,8 @@ export function mapApiArticleToDomain(raw: ApiArticle): Article | null {
     url,
     imageUrl: raw.urlToImage?.trim() ? raw.urlToImage.trim() : null,
     publishedAt,
-    publishedAtLabel: formatPublishedAt(publishedAt) ?? ARTICLE_FALLBACKS.publishedAtLabel
+    publishedAtLabel: formatPublishedAt(publishedAt) ?? ARTICLE_FALLBACKS.publishedAtLabel,
+    publishedAtRelativeLabel: formatRelativeTime(publishedAt) ?? ARTICLE_FALLBACKS.publishedAtLabel
   }
 }
 

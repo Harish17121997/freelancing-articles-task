@@ -11,22 +11,27 @@ export default <Partial<Config>>{
     extend: {
       colors: {
         ink: {
-          DEFAULT: '#1C1B19',
-          soft: '#4A4844'
+          DEFAULT: '#111827',
+          soft: '#6B7280'
         },
         paper: {
-          DEFAULT: '#FBFAF7',
-          dim: '#F1EFE9'
+          DEFAULT: '#FFFFFF',
+          dim: '#EDEEF0'
         },
-        wire: {
-          // "wire service" amber — the signature accent, used sparingly
-          DEFAULT: '#B4790F',
-          soft: '#E8C88B'
+        // Dark teal used for article card surfaces and the detail-page hero,
+        // matching the Figma mock's card/header treatment.
+        night: {
+          DEFAULT: '#173338',
+          soft: '#1F454B'
         },
-        line: '#DEDBD2'
+        // Blue accent for primary CTAs ("Read More"), sampled from the mock.
+        brand: {
+          DEFAULT: '#2B5F8A',
+          soft: '#4C81AC'
+        },
+        line: '#E4E7EB'
       },
       fontFamily: {
-        display: ['"Source Serif 4"', 'Georgia', 'serif'],
         sans: ['Inter', 'system-ui', 'sans-serif']
       }
     }
